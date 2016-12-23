@@ -273,6 +273,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Preview" id="SWX-N6-oaS"/>
+                    <connections>
+                        <outlet property="gifImagePreview" destination="HQu-c2-zTO" id="0vg-cD-yl0"/>
+                        <outlet property="saveButton" destination="xoi-MZ-GNH" id="utO-tt-qiw"/>
+                        <outlet property="shareButton" destination="lnU-9g-0xe" id="K0Z-7u-9Nh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KCC-tI-bRp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
