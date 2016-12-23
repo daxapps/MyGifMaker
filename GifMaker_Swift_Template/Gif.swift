@@ -26,7 +26,7 @@ class Gif: NSObject {
         self.gifData = nil
     }
     
-    init(name: String) {
-        self.gifImage = UIImage.gif(name: name)
-    }
+//    init(name: String) {
+//        self.gifImage = UIImage.gif(name: name)
+//    }
 }

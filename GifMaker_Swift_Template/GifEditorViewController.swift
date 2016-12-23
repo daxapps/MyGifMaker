@@ -35,6 +35,29 @@ class GifEditorViewController: UIViewController, UITextFieldDelegate {
         self.title = ""
     }
     
+    // MARK: Tap gesture
+    
+    // Tap gesture that dismisses the keyboard
+    func addTapToDismiss() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    // MARK: textField delegate methods
+    
+    func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.placeholder = ""
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     // MARK: Observe and respond to keyboard notifications
     
     func subscribeToKeyboardNotifications() {
@@ -64,14 +87,30 @@ class GifEditorViewController: UIViewController, UITextFieldDelegate {
         let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
         return keyboardSize.cgRectValue.height
     }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.placeholder = ""
-    }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+    // MARK: Preview gif
+    
+    @IBAction func presentPreview(_ sender: AnyObject) {
+        let gifPreviewVC = self.storyboard?.instantiateViewController(withIdentifier: "PreviewViewController") as! PreviewViewController
+        
+        let regift = Regift(sourceFileURL: (gif?.videoURL)! as URL, destinationFileURL: nil, frameCount: frameCount, delayTime: delayTime, loopCount: loopCount)
+        let gifURL = regift.createGif(caption: captionTextField.text, font: captionTextField.font)
+        let newGif = Gif(url: gifURL! as NSURL, videoURL: (gif?.videoURL)!, caption: captionTextField.text)
+        
+        let savedGifsVC = self.navigationController?.viewControllers.first
+        
+        //gifPreviewVC.delegate = savedGifsVC as! SavedGifsViewController
+        //gifPreviewVC.gif = newGif
+        
+        navigationController?.pushViewController(gifPreviewVC, animated: true)
     }
 
 }
+
+
+
+
+
+
+
+
