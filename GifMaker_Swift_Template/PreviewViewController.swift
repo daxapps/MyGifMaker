@@ -31,10 +31,15 @@ class PreviewViewController: UIViewController {
         //self.applyTheme(theme: .Dark)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.title = ""
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        self.gifImagePreview.image = self.gif?.gifImage
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,7 +58,7 @@ class PreviewViewController: UIViewController {
         
         activityVC.completionWithItemsHandler = {(activity, completed, items, error) in
             if completed {
-                //      self.navigationController?.popToRootViewController(animated: true)
+                self.navigationController?.popToRootViewController(animated: true)
             }
         }
         
