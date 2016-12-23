@@ -100,11 +100,75 @@ extension UIViewController: UINavigationControllerDelegate, UIImagePickerControl
             else {
                 duration = nil
             }
-            convertVideoToGif(videoURL: videoURL, start: start, duration: duration)
-            //cropVideoToSquare(rawVideoURL: videoURL, start: start, duration: duration)
+            //convertVideoToGif(videoURL: videoURL, start: start, duration: duration)
+            cropVideoToSquare(rawVideoURL: videoURL, start: start, duration: duration)
         }
     }
 
+    func cropVideoToSquare(rawVideoURL: NSURL, start: NSNumber?, duration: NSNumber?) {
+        
+        // Create the AVAsset and AVAssetTrack
+        let videoAsset = AVAsset(url: rawVideoURL as URL)
+        let videoTrack = videoAsset.tracks(withMediaType: AVMediaTypeVideo)[0]
+        
+        // Crop to square
+        let videoComposition = AVMutableVideoComposition()
+        videoComposition.renderSize = CGSize(width: videoTrack.naturalSize.height, height: videoTrack.naturalSize.height)
+        videoComposition.frameDuration = CMTimeMake(1, 30)
+        
+        // Initialize instruction and set time range
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRange(start: kCMTimeZero, duration: CMTimeMakeWithSeconds(60, 30))
+        
+        // Center the cropped video
+        let transformer = AVMutableVideoCompositionLayerInstruction(assetTrack: videoTrack)
+        let t1 = CGAffineTransform(translationX: videoTrack.naturalSize.height, y: -(videoTrack.naturalSize.width - videoTrack.naturalSize.height) / 2)
+        
+        //Rotate 90 degrees to portrait
+        let finalTransform = t1.rotated(by: CGFloat(M_PI_2))
+        transformer.setTransform(finalTransform, at: kCMTimeZero)
+        //instruction.layerInstructions.append(transformer)
+        instruction.layerInstructions = [transformer]
+        //videoComposition.instructions.append(instruction)
+        videoComposition.instructions = [instruction]
+        
+        // export the square video
+        let exporter = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)
+        exporter?.videoComposition = videoComposition
+        let path = createPath()
+        exporter?.outputURL = URL(fileURLWithPath: path)
+        exporter?.outputFileType = AVFileTypeQuickTimeMovie
+        
+        var croppedURL:NSURL?
+        exporter?.exportAsynchronously { () in
+            croppedURL = exporter!.outputURL! as NSURL?
+            self.convertVideoToGif(videoURL: croppedURL!, start: start, duration: duration)
+        }
+    }
+    
+    func createPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0] as NSString
+        let manager = FileManager.default
+        
+        var outputURL = documentsDirectory.appendingPathComponent("output") as NSString
+        do {
+            try manager.createDirectory(atPath: outputURL as String, withIntermediateDirectories: true, attributes: nil)
+        } catch  {
+            print(error)
+        }
+        outputURL = outputURL.appendingPathComponent("output.mov") as NSString
+        
+        // Remove Existing file
+        do {
+            try manager.removeItem(atPath: outputURL as String)
+        } catch  {
+            print(error)
+        }
+        
+        return String(outputURL)
+    }
+    
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }

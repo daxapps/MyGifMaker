@@ -31,15 +31,14 @@ class PreviewViewController: UIViewController {
         //self.applyTheme(theme: .Dark)
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //self.gifImagePreview.image = self.gif?.gifImage
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.title = ""
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.gifImagePreview.image = self.gif?.gifImage
     }
 
     override func didReceiveMemoryWarning() {
