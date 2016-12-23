@@ -2,8 +2,6 @@
 //  UIImage+Gif.swift
 //  GifMaker_Swift_Template
 //
-//  Created by Jason Crawford on 12/22/16.
-//  Copyright © 2016 Gabrielle Miller-Messner. All rights reserved.
 //
 //  Created by Arne Bahlo on 07.06.14.
 //  Copyright (c) 2014 Arne Bahlo. All rights reserved.

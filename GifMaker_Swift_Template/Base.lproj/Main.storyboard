@@ -210,6 +210,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="captionTextField" destination="Hx5-Iw-gBr" id="QQW-Wp-EzB"/>
                         <outlet property="gifImageView" destination="Idg-S9-dYE" id="rVP-mq-ob5"/>
                     </connections>
                 </viewController>
