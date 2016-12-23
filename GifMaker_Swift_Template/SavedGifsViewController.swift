@@ -8,7 +8,14 @@
 
 import UIKit
 
-class SavedGifsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+var gifsFilePath: String {
+    let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+    let directory = directories.first
+    let gifsPath = directory?.appending("/savedGifs")
+    return gifsPath!
+}
+
+class SavedGifsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PreviewViewControllerDelegate {
 
     var savedGifs = [Gif]()
     let cellMargin:CGFloat = 12.0
@@ -29,17 +36,30 @@ class SavedGifsViewController: UIViewController, UICollectionViewDelegate, UICol
 
         
     }
+    
+    // MARK: PreviewVC Delegate methods
+    
+    func previewVC(preview: PreviewViewController, didSaveGif gif: Gif) {
+        gif.gifData = NSData(contentsOf: gif.url as! URL)
+        savedGifs.append(gif)
+        // NSKeyedArchiver.archiveRootObject(savedGifs!, toFile: gifsFilePath)
+        saveGifs(gifs: savedGifs)
+    }
+    
+    func saveGifs(gifs: [Gif]) {
+        NSKeyedArchiver.archiveRootObject(gifs, toFile: gifsFilePath)
+    }
 
     // MARK: CollectionView Delegate and Datasource Methods
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5 //savedGifs.count
+        return savedGifs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GifCell", for: indexPath) as! GifCell
-//        let gif = savedGifs[indexPath.item]
-//        cell.configureForGif(gif: gif)
+        let gif = savedGifs[indexPath.item]
+        cell.configureForGif(gif: gif)
         return cell
     }
     

@@ -64,4 +64,15 @@ class PreviewViewController: UIViewController {
         navigationController?.present(activityVC, animated: true, completion: nil)
     }
 
+    @IBAction func createAndSave(_ sender: Any) {
+        delegate.previewVC(preview: self, didSaveGif: gif!)
+        self.navigationController?.popToRootViewController(animated: true)
+    }
 }
+
+
+
+
+
+
+
