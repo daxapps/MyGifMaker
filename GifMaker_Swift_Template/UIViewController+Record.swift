@@ -9,9 +9,11 @@
 import Foundation
 import UIKit
 import MobileCoreServices
+import AVFoundation
 
 // Regift constants
 let frameCount = 16
+let frameRate = 15
 let delayTime: Float = 0.2
 let loopCount = 0  // 0 means loop forever
 
@@ -87,8 +89,19 @@ extension UIViewController: UINavigationControllerDelegate, UIImagePickerControl
         if mediaType == kUTTypeMovie as String {
             let videoURL = info[UIImagePickerControllerMediaURL] as! NSURL
             //UISaveVideoAtPathToSavedPhotosAlbum(videoURL.path!, nil, nil, nil)
-            dismiss(animated: true, completion: nil)
-            convertVideoToGif(videoURL: videoURL)
+            //dismiss(animated: true, completion: nil)
+            
+            let start = info["_UIImagePickerControllerVideoEditingStart"] as? NSNumber
+            let end = info["_UIImagePickerControllerVideoEditingEnd"] as? NSNumber
+            var duration: NSNumber?
+            if let start = start {
+                duration = NSNumber(value: end!.floatValue - start.floatValue)
+            }
+            else {
+                duration = nil
+            }
+            convertVideoToGif(videoURL: videoURL, start: start, duration: duration)
+            //cropVideoToSquare(rawVideoURL: videoURL, start: start, duration: duration)
         }
     }
 
@@ -97,8 +110,21 @@ extension UIViewController: UINavigationControllerDelegate, UIImagePickerControl
     }
     
     // GIF conversion methods
-    func convertVideoToGif(videoURL: NSURL) {
-        let regift = Regift(sourceFileURL: videoURL as URL, frameCount: frameCount, delayTime: delayTime, loopCount: loopCount)
+    func convertVideoToGif(videoURL: NSURL, start: NSNumber?, duration: NSNumber?) {
+        DispatchQueue.main.async {
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        var regift: Regift
+        
+        if let start = start {
+            // Trimmed
+            regift = Regift(sourceFileURL: videoURL as URL, destinationFileURL: nil, startTime: Float(start), duration: Float(duration!), frameRate: frameRate, loopCount: loopCount)
+        } else {
+            // Untrimmed
+            regift = Regift(sourceFileURL: videoURL as URL, destinationFileURL: nil, frameCount: frameCount, delayTime: delayTime, loopCount: loopCount)
+        }
+        
         let gifURL = regift.createGif()
         let gif = Gif(url: gifURL! as NSURL, videoURL: videoURL, caption: nil)
         
