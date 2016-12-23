@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		A93B3B081D2D3F7900BE1662 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93B3B041D2D3F7900BE1662 /* LaunchScreen.xib */; };
 		A93B3B091D2D3F7900BE1662 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A93B3B061D2D3F7900BE1662 /* Main.storyboard */; };
+		E05861E51E0DD2DD0036A91E /* SavedGifsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05861E41E0DD2DD0036A91E /* SavedGifsViewController.swift */; };
+		E05861E81E0DD91A0036A91E /* GifCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05861E71E0DD91A0036A91E /* GifCell.swift */; };
 		E06E974A1E0C11A700268AE5 /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06E97491E0C11A700268AE5 /* UIImage+Gif.swift */; };
 		E06E974C1E0C1FA800268AE5 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06E974B1E0C1FA800268AE5 /* Gif.swift */; };
 		E0E25AD01E0B7DB5009DAA96 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E25ACF1E0B7DB5009DAA96 /* WelcomeViewController.swift */; };
@@ -27,6 +29,8 @@
 /* Begin PBXFileReference section */
 		A93B3B051D2D3F7900BE1662 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		A93B3B071D2D3F7900BE1662 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E05861E41E0DD2DD0036A91E /* SavedGifsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedGifsViewController.swift; sourceTree = "<group>"; };
+		E05861E71E0DD91A0036A91E /* GifCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GifCell.swift; sourceTree = "<group>"; };
 		E06E97491E0C11A700268AE5 /* UIImage+Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
 		E06E974B1E0C1FA800268AE5 /* Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
 		E0E25ACF1E0B7DB5009DAA96 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +79,14 @@
 			name = Assets;
 			sourceTree = "<group>";
 		};
+		E05861E61E0DD9000036A91E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E05861E71E0DD91A0036A91E /* GifCell.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		E06E97481E0C117500268AE5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -87,10 +99,11 @@
 		E0E25ACE1E0B7D84009DAA96 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				E0E25AD51E0B806D009DAA96 /* UIViewController+Record.swift */,
 				E0E25ACF1E0B7DB5009DAA96 /* WelcomeViewController.swift */,
 				E0E25AD11E0B7DDB009DAA96 /* GifEditorViewController.swift */,
 				E0E25AD31E0B7DF4009DAA96 /* PreviewViewController.swift */,
-				E0E25AD51E0B806D009DAA96 /* UIViewController+Record.swift */,
+				E05861E41E0DD2DD0036A91E /* SavedGifsViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -114,6 +127,7 @@
 		EDFAA8EB1CDA99A500D2CB08 /* GifMaker_Swift_Template */ = {
 			isa = PBXGroup;
 			children = (
+				E05861E61E0DD9000036A91E /* View */,
 				EDFAA8EC1CDA99A500D2CB08 /* AppDelegate.swift */,
 				E06E97481E0C117500268AE5 /* Model */,
 				E0E25ACE1E0B7D84009DAA96 /* Controller */,
@@ -211,6 +225,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				EDFAA9201CDA9C3100D2CB08 /* Regift.swift in Sources */,
+				E05861E51E0DD2DD0036A91E /* SavedGifsViewController.swift in Sources */,
+				E05861E81E0DD91A0036A91E /* GifCell.swift in Sources */,
 				E0E25AD01E0B7DB5009DAA96 /* WelcomeViewController.swift in Sources */,
 				E0E25AD41E0B7DF4009DAA96 /* PreviewViewController.swift in Sources */,
 				E06E974A1E0C11A700268AE5 /* UIImage+Gif.swift in Sources */,
