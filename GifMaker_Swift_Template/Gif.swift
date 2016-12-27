@@ -1,6 +1,6 @@
 //
 //  Gif.swift
-//  GifMaker_Swift_Template
+//  MyGifMaker
 //
 //  Created by Jason Crawford on 12/22/16.
 //  Copyright © 2016 Gabrielle Miller-Messner. All rights reserved.
@@ -28,7 +28,7 @@ class Gif: NSObject, NSCoding {
     
     required init?(coder decoder: NSCoder) {
         self.url = decoder.decodeObject(forKey: "url") as? NSURL
-        self.videoURL = decoder.decodeObject(forKey: "videoURL") as! NSURL
+        self.videoURL = decoder.decodeObject(forKey: "videoURL") as? NSURL
         self.caption = decoder.decodeObject(forKey: "caption") as? String
         self.gifImage = decoder.decodeObject(forKey: "gifImage") as? UIImage
         self.gifData = decoder.decodeObject(forKey: "gifData") as? NSData

@@ -8,15 +8,18 @@
 
 import UIKit
 
-var gifsFilePath: String {
-    let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-    let directory = directories.first
-    let gifsPath = directory?.appending("/savedGifs")
-    return gifsPath!
-}
+//var gifsFilePath: String {
+//    let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+//    let directory = directories.first
+//    let gifsPath = directory?.appending("/savedGifs")
+//    return gifsPath!
+//}
 
-class SavedGifsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PreviewViewControllerDelegate {
+class SavedGifsViewController: UIViewController //, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, PreviewViewControllerDelegate
+{
 
+    let gifsURL = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/savedGifs"
+    fileprivate var gifs = [Gif]()
     var savedGifs = [Gif]()
     let cellMargin:CGFloat = 12.0
     
@@ -27,28 +30,55 @@ class SavedGifsViewController: UIViewController, UICollectionViewDelegate, UICol
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        let previousGifCount = gifs.count
+        gifs = (UIApplication.shared.delegate as! AppDelegate).savedGifs
+        if previousGifCount != gifs.count {
+            print("archiving")
+            // a new gif has been added, data should be saved
+            NSKeyedArchiver.archiveRootObject(gifs, toFile: gifsURL)
+        }
+        
         emptyView.isHidden = (savedGifs.count != 0)
         collectionView.reloadData()
+        
+        title = "My Collection"
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
+        showWelcome()
+        
+        if FileManager.default.fileExists(atPath: gifsURL) {
+            print("unarchiving")
+            
+            let gifs = NSKeyedUnarchiver.unarchiveObject(withFile: gifsURL) as! [Gif]
+            self.gifs = gifs
+            (UIApplication.shared.delegate as! AppDelegate).savedGifs = gifs
+            print(gifs.count)
+        }
+        
+    }
+    
+    func showWelcome() {
+        if !UserDefaults.standard.bool(forKey: "WelcomeViewSeen") {
+            let welcomeViewController = storyboard?.instantiateViewController(withIdentifier: "WelcomeViewController") as! WelcomeViewController
+            navigationController?.pushViewController(welcomeViewController, animated: true)
+        }
     }
     
     // MARK: PreviewVC Delegate methods
     
-    func previewVC(preview: PreviewViewController, didSaveGif gif: Gif) {
-        gif.gifData = NSData(contentsOf: gif.url as! URL)
-        savedGifs.append(gif)
-        // NSKeyedArchiver.archiveRootObject(savedGifs!, toFile: gifsFilePath)
-        saveGifs(gifs: savedGifs)
-    }
-    
-    func saveGifs(gifs: [Gif]) {
-        NSKeyedArchiver.archiveRootObject(gifs, toFile: gifsFilePath)
-    }
+//    func previewVC(preview: PreviewViewController, didSaveGif gif: Gif) {
+//        gif.gifData = NSData(contentsOf: gif.url as! URL)
+//        savedGifs.append(gif)
+//        NSKeyedArchiver.archiveRootObject(savedGifs, toFile: gifsFilePath)
+//        saveGifs(gifs: savedGifs)
+//    }
+//    
+//    func saveGifs(gifs: [Gif]) {
+//        NSKeyedArchiver.archiveRootObject(gifs, toFile: gifsFilePath)
+//    }
 
     // MARK: CollectionView Delegate and Datasource Methods
     
@@ -69,6 +99,17 @@ class SavedGifsViewController: UIViewController, UICollectionViewDelegate, UICol
         let width = (collectionView.frame.size.width - (cellMargin * 2.0))/2.0
         return CGSize(width: width, height: width)
         
+    }
+    
+    // MARK: Present DetailVC
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let gif = savedGifs[indexPath.item]
+        let detailVC = storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+        detailVC.gif = gif
+        
+        detailVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+        present(detailVC, animated: true, completion: nil)
     }
 
 

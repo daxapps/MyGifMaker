@@ -99,7 +99,7 @@ class GifEditorViewController: UIViewController, UITextFieldDelegate {
         
         let savedGifsVC = self.navigationController?.viewControllers.first
         
-        gifPreviewVC.delegate = savedGifsVC as! SavedGifsViewController
+        //gifPreviewVC.delegate = savedGifsVC as! SavedGifsViewController
         gifPreviewVC.gif = newGif
         
         navigationController?.pushViewController(gifPreviewVC, animated: true)
